@@ -4,10 +4,9 @@
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // Adresse 0x27 (voir code "I2C Detector")
 
-// Déclaration des constantes avec const
-const int bt_F = 7;       // Horaire BP
-const int bt_S = 6;       // Stop BP
-const int bt_B = 5;       // Anti-horaire BP
+const int BP_H = 7;       // Horaire BP
+const int BP_S = 6;       // Stop BP
+const int BP_A = 5;       // Anti-horaire BP
 
 const int in1 = 13;        // Motor IN1
 const int in2 = 12;        // Motor IN2
@@ -24,9 +23,9 @@ Stepper stepper(stepsPerRevolution, in1, in3, in2, in4);
 int Mode = 0; // Mode initial (0 = stop, 1 = horaire, 2 = anti-horaire)
 
 void setup() {
-  pinMode(bt_F, INPUT_PULLUP);    // Entrée en pull up
-  pinMode(bt_S, INPUT_PULLUP);    // Entrée en pull up
-  pinMode(bt_B, INPUT_PULLUP);    // Entrée en pull up
+  pinMode(BP_H, INPUT_PULLUP);    // Entrée en pull up
+  pinMode(BP_S, INPUT_PULLUP);    // Entrée en pull up
+  pinMode(BP_A, INPUT_PULLUP);    // Entrée en pull up
 
   pinMode(LedStop, OUTPUT); // Led arrêt sortie
   pinMode(LedRun, OUTPUT);  // Led marche sortie
@@ -46,9 +45,9 @@ void setup() {
 
 void loop() {
   // Lire l'état des BP pour la rotation
-  if (digitalRead(bt_F) == 0) { Mode = 1; }  // Sens horaire
-  if (digitalRead(bt_S) == 0) { Mode = 0; }  // Arrêter le moteur
-  if (digitalRead(bt_B) == 0) { Mode = 2; }  // Sens antihoraire
+  if (digitalRead(BP_H) == 0) { Mode = 1; }  // Sens horaire
+  if (digitalRead(BP_S) == 0) { Mode = 0; }  // Arrêter le moteur
+  if (digitalRead(BP_A) == 0) { Mode = 2; }  // Sens antihoraire
 
   lcd.setCursor(0, 0);
   if (Mode == 0) { 
