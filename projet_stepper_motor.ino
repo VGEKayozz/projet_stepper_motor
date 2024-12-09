@@ -4,9 +4,9 @@
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // Adresse 0x27 (voir code "I2C Detector")
 
-const int BP_H = 7;       // Horaire BP
-const int BP_S = 6;       // Stop BP
-const int BP_A = 5;       // Anti-horaire BP
+const int BP_H = 7;       // Horaire BP (mode 2)
+const int BP_S = 6;       // Stop BP (mode 1)
+const int BP_A = 5;       // Anti-horaire BP (mode 3)
 
 const int in1 = 13;        // Motor IN1
 const int in2 = 12;        // Motor IN2
@@ -44,23 +44,25 @@ void setup() {
 }
 
 void loop() {
-  // Lire l'état des BP pour la rotation
-  if (digitalRead(BP_H) == 0) { Mode = 1; }  // Sens horaire
-  if (digitalRead(BP_S) == 0) { Mode = 0; }  // Arrêter le moteur
-  if (digitalRead(BP_A) == 0) { Mode = 2; }  // Sens antihoraire
+  // Lire l'état des BP pour controle moteur
+  if (digitalRead(BP_H) == 0) 
+  { Mode = 1; }  // Sens horaire
+  if (digitalRead(BP_S) == 0) 
+  { Mode = 0; }  // Arrêter le moteur
+  if (digitalRead(BP_A) == 0) 
+  { Mode = 2; }  // Sens antihoraire
 
   lcd.setCursor(0, 0);
   if (Mode == 0) { 
     lcd.print("      Arret      ");
     digitalWrite(LedStop, HIGH);
     digitalWrite(LedRun, LOW);
-
     // Lire la valeur du potentiomètre et ajuster la tonalité du buzzer
     int potValue = analogRead(potPin);       // Lire valeur potentiomètre
     int toneFreq = map(potValue, 0, 1023, 100, 2000); // Convertir en fréquence entre 100 et 2000 Hz
     tone(buzzerPin, toneFreq);               // Jouer la tonalité sur le buzzer
   } else {  
-    lcd.print((Mode == 1) ? "    Horaire   " : "  Anti-horaire ");
+    lcd.print((Mode == 1) ? "    Horaire   " : "  Anti-horaire "); // condition avec le ? horaire = vrai et anti-horraire = faux
     digitalWrite(LedRun, HIGH);
     digitalWrite(LedStop, LOW);
     noTone(buzzerPin);  // Stop buzzer quand moteur tourne
